@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slot{
+public class Slot : ICloneable{
 
+    private string name;
     private int size;
     private Vector2Int position; // Posição na tela
     private int x; // Posição x do Array2D
@@ -17,22 +18,22 @@ public class Slot{
     }
     private string filter = "any";
 
-    public Slot(Item item,int amount, Vector2Int position, int size){
-        this.item = item;
-        this.position = position;
-        this.amount = amount;
-        this.size = size;
-        this.x = position.x;
-        this.y = position.y;
-    }
-    public Slot(Item item,int amount, int x,int y,Vector2Int position, int size){
-        this.item = item;
-        this.position = position;
-        this.amount = amount;
+    public Slot(string name,int x,int y, int size){
+        this.name = name;
+        this.position = new Vector2Int(x,y);
         this.size = size;
         this.x = x;
         this.y = y;
     }
+    public Slot(String name,int x,int y,Vector2Int position, int size){
+        this.name = name;
+        this.item = item;
+        this.position = position;
+        this.size = size;
+        this.x = x;
+        this.y = y;
+    }
+    
     public void renderSlot(Vector2 pos, bool isFixed = false){
         int x = position.x;
         int y = position.y;
@@ -75,6 +76,10 @@ public class Slot{
         return false;
     }
     
+    public bool isName(string name){
+        return this.name.Equals(name);
+    }
+
     public Item getItem(){
         return item;
     }
@@ -85,8 +90,15 @@ public class Slot{
     public bool isItem(string id){
         return id.Equals(item.getID());
     }
+    public void addItem(Item item, int amount){
+        this.item = item;
+        this.amount = amount;
+    }
     public void setFilter(string filter){
         this.filter = filter;
+    }
+    public string getFilter(){
+        return filter;
     }
     public int getAmount(){
         return amount;
@@ -103,18 +115,35 @@ public class Slot{
 
     public bool allowItem(){
         if(!itemExists) return false;
-        Debug.Log(filter);
         return filter == "any" || item.getID().Equals(filter);
     }
+
+    #region ICloneable Members
+
+    public object Clone(){
+        return this.MemberwiseClone();
+    }
+
+    #endregion
 }
 
 public static class slotExtension{
     public static bool addSlot(this Array2D<Slot> listItem, Slot slot, bool ignore = false) {
         if(ignore || slot.allowItem()){
-            Vector2Int position = slot.getXY();
-            listItem.Add(slot,position.x,position.y);
+            Vector2Int coord = slot.getXY();
+            listItem.Add(slot,coord.x,coord.y);
             return true;
         }
         return false;
+    }
+
+    public static Slot FindWithName(this Array2D<Slot> listItem, string name){
+        for(int i=0;i<listItem.Size();i++){
+            Slot slot = listItem.Get(i);
+            if(slot != null && slot.isName(name)){
+                return slot;
+            }
+        }
+        return null;
     }
 } 

@@ -51,20 +51,19 @@ public class GameController : MonoBehaviour{
                 Slot slot = inv.Get(coord.x,coord.y);
                 if(slot != null){
                     Item item = slot.getItem();
-
                     Vector2Int position = slot.getPosition();
 
                     Slot current = GameController.currentHand;
                     // Não tem item no Slot && Tem  item na mão
                     if(item == null && current != null){
-                        if(inv.Add(current.getItem(),coord,position,current.getAmount())){
+                        if(inv.Set(current.getItem(),coord,current.getAmount())){
                             GameController.currentHand = null;
                         }
                     }else
                     // Tem item no Slot && Não tem item na mão
                     if(slot.itemExists && current == null){
-                        GameController.currentHand = slot;
-                        inv.Remove(coord,position);
+                        GameController.currentHand = (Slot) slot.Clone();
+                        slot.removeItem();
                     }else
                     // Tem item no slot && Tem item na mão
                     if(slot.itemExists && current != null){
@@ -72,7 +71,7 @@ public class GameController : MonoBehaviour{
                             slot.addAmount(current.getAmount());
                             GameController.currentHand = null;
                         }else{
-                            if(inv.Add(current.getItem(),coord,position,current.getAmount())){
+                            if(inv.Set(current.getItem(),coord,current.getAmount())){
                                 GameController.currentHand = slot;
                             }
                         }

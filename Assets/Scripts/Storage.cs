@@ -8,7 +8,7 @@ public class Storage : Inventory{
         listItem = new Array2D<Slot>(columns,rows);
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
-                listItem.addSlot(new Slot(null,0, new Vector2Int(i,j),size),true);
+                listItem.addSlot(new Slot(i+"x"+j,i,j,size),true);
             }
         }
     }
@@ -34,9 +34,9 @@ public class Storage : Inventory{
     
     private void Update() {
         if(!open) return;
-        if(Input.GetKeyDown("1"))Add(new Item("book"),0,0);
-        if(Input.GetKeyDown("2"))Add(new Item("carrot"),1,0);
-        if(Input.GetKeyDown("3"))Add(new Item("bread"),2,0);
-        if(Input.GetKeyDown("4"))Add(new Item("bow"),3,0);
+        if(Input.GetKeyDown("1"))Set(new Item("book"),0,0);
+        if(Input.GetKeyDown("2"))Set(new Item("carrot"),1,0);
+        if(Input.GetKeyDown("3"))Set(new Item("bread"),2,0);
+        if(Input.GetKeyDown("4"))Set(new Item("bow"),3,0);
     }
 }

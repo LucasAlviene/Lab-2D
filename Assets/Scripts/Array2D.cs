@@ -18,11 +18,23 @@ public class Array2D<T>{
         this.rows = rows; // Y
     }
 
+    public int Size(){
+        return columns * rows;
+    }
+
     /// <summary>
     /// Retornar a matriz em forma de array
     /// </summary>
     public T[] Get(){
         return list;
+    }
+
+
+    /// <summary>
+    /// Retornar o item conforme o indice
+    /// </summary>
+    public T Get(int x){
+        return list[x];
     }
 
     /// <summary>
@@ -39,7 +51,8 @@ public class Array2D<T>{
         if(columns > y && rows > x){
             list[x + y * rows] = item;
         }else{
-            Debug.LogWarning("O número máximo é: "+(columns - 1)+" x "+(rows - 1)+" - "+x+" x "+y);
+           Debug.Log("Não foi possível encontrar um lugar disponivel");
+           // Debug.LogWarning("O número máximo é: "+(columns - 1)+" x "+(rows - 1)+" - "+x+" x "+y);
         }
     }
 
