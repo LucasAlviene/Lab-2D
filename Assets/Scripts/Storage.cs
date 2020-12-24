@@ -34,9 +34,9 @@ public class Storage : Inventory{
     
     private void Update() {
         if(!open) return;
-        if(Input.GetKeyDown("1"))Set(new Item("book"),0,0);
+        if(Input.GetKeyDown("1"))Set(new Item("book"),0,0,4);
         if(Input.GetKeyDown("2"))Set(new Item("carrot"),1,0);
         if(Input.GetKeyDown("3"))Set(new Item("bread"),2,0);
-        if(Input.GetKeyDown("4"))Set(new Item("bow"),3,0);
+        if(Input.GetKeyDown("4"))Set(new Item("bow"),3,0,5);
     }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Furnace : Inventory, ISizeFixed{
 
-    private int progress;
+    private int progress = 0;
+    private bool isProccess = false;
 
     private void Awake() {
         listItem = new Array2D<Slot>(columns,rows);
@@ -45,22 +46,36 @@ public class Furnace : Inventory, ISizeFixed{
 
 
     private void Proccess(){
-        Slot input1 = GetSlot("input_1");
-        Slot input2 = GetSlot("input_2");
-        if(input1.itemExists && input2.itemExists){
-            input1.removeItem();
-            input2.removeItem();
-            progress = 0;
-            StartCoroutine(ProccessItem());
+        if(progress == 0 && !isProccess){
+            Slot input1 = GetSlot("input_1");
+            Slot input2 = GetSlot("input_2");
+            string outputid  = "carrot";
+            if(input1.itemExists && input2.itemExists){
+                Slot output = GetSlot("output");
+
+                if((!output.itemExists || output.isItem(outputid)) && input1.subAmount(4)){
+                    if(input1.getAmount() == 0) input1.removeItem();
+                    input2.subAmount(1);
+                    progress = 0;
+                    isProccess = true;
+                    StartCoroutine(ProccessItem(outputid,5));
+                }
+            }
         }
     }
 
-    private IEnumerator ProccessItem(){
+    private IEnumerator ProccessItem(string id, int amount){
         while (progress < 100){
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.08f);
             progress++;
         }
-        GetSlot("output").addItem(new Item("carrot"),5);
+        Slot output = GetSlot("output");
+        if(output.itemExists){
+            output.addAmount(amount);
+        }else{
+            output.addItem(new Item(id),amount);
+        }
         progress = 0;
+        isProccess = false;
     }
 }

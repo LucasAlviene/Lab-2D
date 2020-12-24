@@ -103,6 +103,15 @@ public class Slot : ICloneable{
     public int getAmount(){
         return amount;
     }
+
+    public bool subAmount(int amount, bool removeItem = true){
+        if(amount <= this.amount){
+            this.amount -= amount;
+            if(this.amount == 0) item = null;
+            return true;
+        }
+        return false;
+    }
     public void addAmount(int amount){
         this.amount += amount;
     }
