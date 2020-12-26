@@ -57,8 +57,8 @@ public class Slot : ICloneable{
         float h = pos.y + y;
         
         Rect p = new Rect(w,h, size , size);
-        GUI.Label( new Rect(w,h + 40, size , size),""+getAmount());
         GUI.DrawTexture(p,Resources.Load<Texture2D>("Inventory/"+item.getID()));
+        GUI.Label( new Rect(w,h + 40, size , size),""+getAmount());
     }
 
     public bool check(Vector2 current,Vector2 pos,bool isFixed = false){
@@ -88,7 +88,7 @@ public class Slot : ICloneable{
         this.amount = 0;
     }
     public bool isItem(string id){
-        return id.Equals(item.getID());
+        return item.isItem(id);
     }
     public void addItem(Item item, int amount){
         this.item = item;
@@ -117,6 +117,9 @@ public class Slot : ICloneable{
     }
     public Vector2Int getPosition(){
         return position;
+    }
+    public void setPosition(Vector2Int position){
+        this.position = position;
     }
     public Vector2Int getXY(){
         return new Vector2Int(x,y);

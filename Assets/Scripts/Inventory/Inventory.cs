@@ -26,8 +26,7 @@ public class Inventory : MonoBehaviour, ISlot{
     }
     public bool Set(Item item, int x, int y, int amount = 1){
         Slot slot = listItem.Get(x,y);
-        Item current = slot.getItem();
-        if(slot.itemExists && current.isItem(item.getID())){
+        if(slot.itemExists && slot.isItem(item.getID())){
             slot.addAmount(amount);
         }else{
             Slot newSlot = (Slot) slot.Clone();
@@ -39,5 +38,9 @@ public class Inventory : MonoBehaviour, ISlot{
 
     public Slot Get(int x, int y){
         return listItem.Get(x,y);
+    }
+    
+    private void Update(){
+        gameObject.SendMessage("ProcessCrafting");
     }
 }

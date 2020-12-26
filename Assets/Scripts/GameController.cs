@@ -5,6 +5,9 @@ public class GameController : MonoBehaviour{
 
     public static Slot currentHand{get;set;}
 
+    private bool ChangeSlot = false;
+    private Slot currentSlot{get;set;}
+
     public static Inventory[] InventoryOpen() {
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Inventory");    
         List<Inventory> novo = new List<Inventory>();
@@ -44,12 +47,25 @@ public class GameController : MonoBehaviour{
     }
 
     private void Update() {
+        if(ChangeSlot){
+            ChangePosition();
+            if(Input.GetKeyDown(KeyCode.Mouse0)){
+                Debug.Log(currentSlot.getPosition());
+                currentSlot = null;
+                ChangeSlot = false;
+            }
+        }else
         if(Input.GetKeyDown(KeyCode.Mouse0)){
             Inventory inv = GameController.FindInventory();
             if(inv != null){
-                Vector2Int coord = FindItem(inv); // Posição no Array2D
+                Vector2Int coord = FindSlot(inv); // Posição no Array2D
                 Slot slot = inv.Get(coord.x,coord.y);
                 if(slot != null){
+                    if(Input.GetKey(KeyCode.LeftControl) && (inv as ISizeFixed) != null){ 
+                        ChangeSlot = true;
+                        currentSlot = slot;
+                        //ChangePosition(slot); 
+                    }
                     Item item = slot.getItem();
                     Vector2Int position = slot.getPosition();
 
@@ -81,7 +97,12 @@ public class GameController : MonoBehaviour{
         }
     }
 
-    private Vector2Int FindItem(Inventory inv){
+    private void ChangePosition(){
+        Vector2Int mousePosition = new Vector2Int((int)Input.mousePosition.x - 50,(int)(Screen.height/2 - Input.mousePosition.y) - 50);
+        currentSlot.setPosition(mousePosition);
+    }
+
+    private Vector2Int FindSlot(Inventory inv){
         Vector2 mousePosition = new Vector2(Input.mousePosition.x,Screen.height - Input.mousePosition.y);
         Slot slot = null;
         bool isFixed = (inv as ISizeFixed) != null;
