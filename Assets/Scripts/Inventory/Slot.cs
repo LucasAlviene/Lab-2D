@@ -16,7 +16,7 @@ public class Slot : ICloneable{
             return item != null;
         }
     }
-    private string filter = "any";
+    private Filter filter = new Filter("any");
 
     public Slot(string name,int x,int y, int size){
         this.name = name;
@@ -94,11 +94,11 @@ public class Slot : ICloneable{
         this.item = item;
         this.amount = amount;
     }
-    public void setFilter(string filter){
-        this.filter = filter;
+    public void setFilter(string filter, FilterType type = FilterType.id){
+        this.filter = new Filter(filter,type);
     }
     public string getFilter(){
-        return filter;
+        return filter.getName();
     }
     public int getAmount(){
         return amount;
@@ -127,7 +127,7 @@ public class Slot : ICloneable{
 
     public bool allowItem(){
         if(!itemExists) return false;
-        return filter == "any" || item.getID().Equals(filter);
+        return filter.check(item);
     }
 
     #region ICloneable Members

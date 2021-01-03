@@ -13,7 +13,7 @@ public class Furnace : Inventory, ISizeFixed, ICrafting{
         Slot input1 = new Slot("input_1",0,0, new Vector2Int(162,32),size);
         
         Slot input2 = new Slot("input_2",0,1, new Vector2Int(162,111),size);
-        input2.setFilter("bow"); // Aceita só item com nome "Bow"
+        input2.setFilter("coal",FilterType.tag); // Aceita só item com nome "Bow"
 
         Slot output = new Slot("output",0,2, new Vector2Int(271,68),size);
         output.setFilter("none"); // Não aceita nenhum item
@@ -32,7 +32,9 @@ public class Furnace : Inventory, ISizeFixed, ICrafting{
         if(!open) return;
         Rect pos = new Rect(position.x, position.y, width,height);
         GUI.Box(pos, BoxTexture2);
-        GUI.Label(pos,progress+"%");
+
+        Rect pro = new Rect(position.x + 230, position.y + 82, width,height);
+        GUI.Label(pro,progress+"%");
     
         GetSlot("input_1").renderSlot(position,true);
         GetSlot("input_2").renderSlot(position,true);
